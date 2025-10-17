@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>خوش‌آمدید — آموزش و پرورش آی‌تی</title>
+  <style>
+    /* ====== Reset & base ====== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html,body { height:100%; font-family: "Segoe UI", Tahoma, "Helvetica Neue", Arial, sans-serif; }
+    body { background: #0f1724; color: #111827; overflow-x:hidden; }
+
+    /* ====== Root colors and utilities ====== */
+    :root{
+      --bg-1: #ff8a00;
+      --bg-2: #ff3d81;
+      --bg-3: #7c3aed;
+      --bg-4: #06b6d4;
+      --glass: rgba(255,255,255,0.06);
+      --card: rgba(255,255,255,0.06);
+      --accent-text: #fff;
+    }
+
+    /* ====== Animated gradient background for hero ====== */
+    .hero-wrap{
+      position:relative;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:40px 20px;
+      background: linear-gradient(120deg, rgba(255,138,0,0.12), rgba(124,58,237,0.12), rgba(6,182,212,0.07));
+      overflow:hidden;
+    }
+    .animated-gradient {
+      position:absolute; inset: -20% -20% auto -20%; height:140%;
+      background: conic-gradient(from 90deg at 50% 50%, var(--bg-1), var(--bg-2), var(--bg-3), var(--bg-4), var(--bg-1));
+      filter: blur(60px) saturate(140%);
+      opacity:.55;
+      animation: spin 18s linear infinite;
+      transform-origin:center;
+      z-index:0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* floating colorful blobs */
+    .blob {
+      position:absolute; border-radius:50%; filter:blur(30px) saturate(130%);
+      opacity:.6; mix-blend-mode: screen; z-index:0;
+    }
+    .blob.b1{ width:520px; height:520px; left: -10%; top: -10%; background: radial-gradient(circle at 30% 30%, #ff8a00, transparent 45%); animation: floatA 10s ease-in-out infinite; }
+    .blob.b2{ width:420px; height:420px; right:-8%; top:8%; background: radial-gradient(circle at 60% 40%, #ff3d81, transparent 40%); animation: floatB 12s ease-in-out infinite; }
+    .blob.b3{ width:300px; height:300px; left:24%; bottom:-8%; background: radial-gradient(circle at 60% 60%, #06b6d4, transparent 45%); animation: floatC 14s ease-in-out infinite; }
+    @keyframes floatA{ 0%{transform:translateY(0)}50%{transform:translateY(18px) rotate(6deg)}100%{transform:translateY(0)} }
+    @keyframes floatB{ 0%{transform:translateY(0)}50%{transform:translateY(-12px) rotate(-4deg)}100%{transform:translateY(0)} }
+    @keyframes floatC{ 0%{transform:translateY(0)}50%{transform:translateY(28px) rotate(3deg)}100%{transform:translateY(0)} }
+
+    /* ====== Container ====== */
+    .container {
+      position:relative;
+      z-index:2;
+      width:100%;
+      max-width:1200px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:1fr 420px;
+      gap:32px;
+      align-items:center;
+      padding: 40px;
+    }
+
+    /* ====== Left: Hero text ====== */
+    .hero {
+      color: white;
+      padding:20px;
+    }
+    .logo {
+      display:flex; align-items:center; gap:12px; margin-bottom:18px;
+    }
+    .logo .badge {
+      background:linear-gradient(90deg,var(--bg-2),var(--bg-1));
+      color:var(--accent-text);
+      padding:10px 14px; border-radius:10px; font-weight:700; box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    h1 {
+      font-size: clamp(28px, 4.2vw, 48px);
+      line-height:1.02;
+      margin-bottom:12px;
+      text-shadow: 0 6px 26px rgba(0,0,0,0.45);
+    }
+    p.lead {
+      color: rgba(255,255,255,0.92);
+      font-size: clamp(14px, 2.4vw, 18px);
+      margin-bottom:20px;
+      opacity:.95;
+    }
+
+    /* CTA */
+    .cta-row { display:flex; gap:14px; align-items:center; flex-wrap:wrap; }
+    .btn {
+      background:linear-gradient(90deg,var(--bg-3),var(--bg-4));
+      color:white; padding:12px 20px; border-radius:12px; border:none;
+      font-weight:700; cursor:pointer; box-shadow: 0 8px 30px rgba(124,58,237,0.18);
+      transition: transform .18s ease, box-shadow .18s;
+    }
+    .btn.secondary {
+      background:transparent; border:1.5px solid rgba(255,255,255,0.12); color:white;
+      box-shadow:none; font-weight:600;
+    }
+    .btn:hover { transform: translateY(-4px); box-shadow: 0 18px 60px rgba(124,58,237,0.18); }
+
+    /* promo ticker (appearing/disappearing messages) */
+    .promo {
+      margin-top:22px;
+      height:44px;
+      display:flex; align-items:center; gap:12px;
+    }
+    .promo .dot { width:12px; height:12px; border-radius:50%; background:linear-gradient(90deg,var(--bg-1),var(--bg-2)); box-shadow:0 6px 18px rgba(0,0,0,0.35); }
+    .promo .msg {
+      color: #fff; font-weight:700; font-size:16px; min-width: 220px;
+      position:relative; overflow:hidden;
+      height:100%;
+    }
+    .msg span {
+      position:absolute; right:0; top:0; opacity:0;
+      transform: translateY(8px);
+      animation: promoCycle 12s linear infinite;
+      white-space:nowrap;
+    }
+    /* we'll duplicate spans with delay via JS so CSS animation uniform */
+    @keyframes promoCycle {
+      0% { opacity:0; transform: translateY(8px); }
+      6% { opacity:1; transform: translateY(0); }
+      22% { opacity:1; transform: translateY(0); }
+      28% { opacity:0; transform: translateY(-8px); }
+      100% { opacity:0; transform: translateY(-8px); }
+    }
+
+    /* ====== Right: Card panel ====== */
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius:18px;
+      padding: 22px;
+      min-height:360px;
+      box-shadow: 0 10px 40px rgba(2,6,23,0.6);
+      color: #fff;
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      align-items:stretch;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.04);
+    }
+    .panel h3 { font-size:18px; margin-bottom:6px; }
+    .feature-list { display:grid; gap:12px; margin-top:8px; }
+    .feature {
+      background: rgba(255,255,255,0.03);
+      border-radius:12px;
+      padding:10px; display:flex; gap:12px; align-items:center;
+      transform: translateY(18px); opacity:0;
+      animation: cardIn .8s forwards;
+    }
+    .feature:nth-child(1){ animation-delay: .2s; }
+    .feature:nth-child(2){ animation-delay: .4s; }
+    .feature:nth-child(3){ animation-delay: .6s; }
+    @keyframes cardIn { to { transform: translateY(0); opacity:1; } }
+
+    .feature .ic { width:44px; height:44px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-weight:700; color:white; }
+    .f1{ background: linear-gradient(90deg,var(--bg-1),var(--bg-2)); box-shadow: 0 8px 30px rgba(255,138,0,0.12); }
+    .f2{ background: linear-gradient(90deg,var(--bg-3),var(--bg-4)); box-shadow: 0 8px 30px rgba(124,58,237,0.12); }
+    .f3{ background: linear-gradient(90deg,var(--bg-4),var(--bg-1)); box-shadow: 0 8px 30px rgba(6,182,212,0.12); }
+
+    /* ====== Footer CTA strip ====== */
+    .cta-strip {
+      position:fixed;
+      left:0; right:0; bottom:18px; margin:auto;
+      max-width:980px; z-index:3;
+      display:flex; justify-content:space-between; gap:14px; padding:10px 14px;
+      background: linear-gradient(90deg, rgba(124,58,237,0.14), rgba(6,182,212,0.09));
+      border-radius:14px; box-shadow:0 10px 40px rgba(2,6,23,0.55);
+      align-items:center;
+    }
+    .cta-strip p{ color: #fff; font-weight:700; margin:0; }
+
+    /* ====== Responsive ====== */
+    @media (max-width: 980px){
+      .container { grid-template-columns: 1fr; padding: 28px; gap:20px; }
+      .panel { order: 2; }
+      .hero { order: 1; }
+      .cta-strip { left:12px; right:12px; bottom:12px; padding:10px; }
+    }
+
+    @media (max-width: 520px){
+      .promo .msg { min-width:150px; font-size:14px; }
+      .panel{ padding:16px; min-height:260px; }
+      .logo .badge { padding:8px 10px; font-size:14px; }
+      .blob { display:none; }
+      .animated-gradient { filter: blur(40px); opacity:.45; }
+    }
+
+    /* small utility */
+    .muted { color: rgba(255,255,255,0.8); font-weight:600; font-size:13px; }
+  </style>
+</head>
+<body>
+  <div class="hero-wrap">
+    <div class="animated-gradient" aria-hidden="true"></div>
+
+    <!-- colorful blobs -->
+    <div class="blob b1" aria-hidden="true"></div>
+    <div class="blob b2" aria-hidden="true"></div>
+    <div class="blob b3" aria-hidden="true"></div>
+
+    <div class="container" role="main">
+      <!-- LEFT: Hero Text -->
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="logo" role="img" aria-label="لوگو آموزش و پرورش آی تی">
+          <div class="badge">آیین‌IT</div>
+          <div>
+            <div class="muted">مرکز آموزش و پرورش</div>
+            <div class="muted" style="font-size:12px; margin-top:4px;">دوره‌ها، وبینارها و منابع روز آی‌تی</div>
+          </div>
+        </div>
+
+        <h1 id="hero-title">به «آموزش و پرورش آی‌تی» خوش آمدید — آیندهٔ دیجیتال از اینجا شروع می‌شود!</h1>
+        <p class="lead">دوره‌های عملی، مربیان باتجربه، و مسیرهای شغلی طراحی شده برای ورود سریع شما به بازار کار IT. یاد بگیرید، اجرا کنید، بدرخشید.</p>
+
+        <div class="cta-row" role="region" aria-label="دکمه های اقدام">
+          <button class="btn" onclick="openRegister()">ثبت‌نام رایگان</button>
+          <button class="btn secondary" onclick="openCourses()">مشاهده دوره‌ها</button>
+        </div>
+
+        <div class="promo" aria-live="polite" aria-atomic="true">
+          <div class="dot" aria-hidden="true"></div>
+          <div class="msg" id="promo-msg" aria-hidden="false">
+            <!-- messages injected by JS -->
+          </div>
+          <div style="flex:1"></div>
+          <div class="muted">تخفیف ویژه امروز: <strong style="margin-right:8px">۳۰٪</strong></div>
+        </div>
+      </section>
+
+      <!-- RIGHT: Panel -->
+      <aside class="panel" aria-labelledby="panel-title">
+        <h3 id="panel-title">ویژگی‌های برجسته</h3>
+
+        <div class="feature-list">
+          <div class="feature">
+            <div class="ic f1">T</div>
+            <div>
+              <div style="font-weight:800">دوره‌های عملی</div>
+              <div class="muted" style="margin-top:6px">پروژه‌محور، مناسب برای مبتدی تا حرفه‌ای</div>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="ic f2">M</div>
+            <div>
+              <div style="font-weight:800">مربیان حرفه‌ای</div>
+              <div class="muted" style="margin-top:6px">اساتیدی که در صنعت فعالیت می‌کنند</div>
+            </div>
+          </div>
+
+          <div class="feature">
+            <div class="ic f3">C</div>
+            <div>
+              <div style="font-weight:800">گواهی و فرصت شغلی</div>
+              <div class="muted" style="margin-top:6px">پشتیبانی در یافتن شغل پس از دوره</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:auto; display:flex; gap:10px; align-items:center;">
+          <div style="flex:1">
+            <div class="muted" style="font-size:13px">شروع کنید، فقط با یک کلیک</div>
+            <div style="font-weight:800; color:#fff; margin-top:6px">بیش از <span id="students-count">12,430</span> دانش‌آموز راضی</div>
+          </div>
+          <button class="btn" onclick="openRegister()">همین حالا ثبت نام</button>
+        </div>
+      </aside>
+    </div>
+
+    <!-- bottom CTA floating -->
+    <div class="cta-strip" role="region" aria-label="دعوت به اقدام">
+      <p>رویداد آنلاین رایگان این جمعه — <strong>مکان محدود!</strong></p>
+      <div style="display:flex; gap:8px;">
+        <button class="btn" style="padding:8px 14px" onclick="openEvent()">رزرو صندلی</button>
+        <button class="btn secondary" style="padding:8px 14px" onclick="openRegister()">مشاهده جزئیات</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ====== Promo messages cycling (appear/disappear) ====== */
+    const promos = [
+      "شروع مسیر شغلی: دوره‌های Node.js، React و DevOps",
+      "وبینار رایگان: مصاحبه‌های فنی و نکات استخدام",
+      "۳۰٪ تخفیف تابستانه برای ثبت‌نام‌های اول هفته",
+      "منابع رایگان: ۵۰ تمرین کدنویسی عملی",
+      "پشتیبانی شغلی و رزومه‌سازی برای فارغ‌التحصیلان"
+    ];
+
+    const promoContainer = document.getElementById('promo-msg');
+
+    // create multiple spans so that animation timing works uniformly
+    promos.forEach((text, i) => {
+      const sp = document.createElement('span');
+      sp.textContent = text;
+      // stagger animation by setting animationDelay so only one visible at a time
+      sp.style.animationDelay = (i * (12 / promos.length)) + 's';
+      promoContainer.appendChild(sp);
+    });
+
+    /* ====== Simple counters / dynamic bits ====== */
+    // animate student count
+    function animateCount(el, start, end, duration=1600){
+      let startTime = null;
+      function step(time){
+        if (!startTime) startTime = time;
+        const progress = Math.min((time - startTime) / duration, 1);
+        el.textContent = Math.floor(start + (end - start) * progress).toLocaleString('fa-IR');
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    document.addEventListener('DOMContentLoaded', ()=> {
+      animateCount(document.getElementById('students-count'), 8000, 12430, 1400);
+    });
+
+    /* ====== click handlers (example placeholders) ====== */
+    function openRegister(){
+      alert("برای ثبت‌نام به صفحهٔ ثبت‌نام منتقل می‌شوید (اینجا جای لینک واقعی است).");
+    }
+    function openCourses(){
+      alert("مشاهده دوره‌ها — اینجا باید به صفحهٔ دوره‌ها لینک بدهید.");
+    }
+    function openEvent(){
+      alert("رزرو رویداد — اینجا باید فرم رزرو/صفحهٔ رویداد باز شود.");
+    }
+
+    /* ====== Accessibility: pause promo on focus/hover ====== */
+    promoContainer.addEventListener('mouseenter', ()=> {
+      const spans = promoContainer.querySelectorAll('span');
+      spans.forEach(s => s.style.animationPlayState = 'paused');
+    });
+    promoContainer.addEventListener('mouseleave', ()=> {
+      const spans = promoContainer.querySelectorAll('span');
+      spans.forEach(s => s.style.animationPlayState = 'running');
+    });
+
+    /* ====== Optional: gentle parallax based on mouse for depth ====== */
+    document.addEventListener('mousemove', (e) => {
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const rx = (e.clientX - w/2) / w;
+      const ry = (e.clientY - h/2) / h;
+      document.querySelectorAll('.blob').forEach((b, i) => {
+        const mul = (i+1) * 8;
+        b.style.transform = `translate(${rx*mul}px, ${ry*mul}px)`;
+      });
+      document.querySelector('.animated-gradient').style.transform = `rotate(${rx*20}deg)`;
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تک گجت - فروشگاه دستگاه های دیجیتال</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #4a6bff;
+            --secondary: #ff4a6b;
+            --accent: #6bff4a;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+        }
+
+        body {
+            background-color: #f5f7ff;
+            color: #333;
+            line-height: 1.6;
+            text-align: right;
+            direction: rtl;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(to left, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-left: 10px;
+            color: var(--accent);
+        }
+
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-right: 20px;
+            position: relative;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        nav ul li a i {
+            margin-left: 8px;
+        }
+
+        /* Hero Slider */
+        .slider {
+            margin: 20px 0;
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: flex-end;
+            padding: 30px;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide-content {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+
+        .slide-content h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .slide-content p {
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #5ae33f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider-nav {
+            position: absolute;
+            bottom: 20px;
+            right: 50%;
+            transform: translateX(50%);
+            display: flex;
+            z-index: 10;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            margin: 0 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: white;
+        }
+
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 50%;
+            transform: translateX(50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to left, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 20px 0;
+        }
+
+        .product {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-img {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-content {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Registration Form */
+        .registration {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: 40px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 107, 255, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .footer-links a i {
+            margin-left: 10px;
+        }
+
+        .social-icons {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .social-icons a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-left: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 5px;
+            }
+
+            .slide-content h2 {
+                font-size: 1.5rem;
+            }
+
+            .slide-content p {
+                font-size: 0.9rem;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 576px) {
+            .slider {
+                height: 300px;
+            }
+
+            .slide-content {
+                padding: 15px;
+            }
+
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeIn 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-laptop-code"></i>
+                    <span>تک گجت</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-home"></i> خانه</a></li>
+                        <li><a href="#"><i class="fas fa-mobile-alt"></i> گوشی‌ها</a></li>
+                        <li><a href="#"><i class="fas fa-laptop"></i> لپ‌تاپ‌ها</a></li>
+                        <li><a href="#"><i class="fas fa-headphones"></i> لوازم جانبی</a></li>
+                        <li><a href="#"><i class="fas fa-shopping-cart"></i> سبد خرید</a></li>
+                        <li><a href="#"><i class="fas fa-user"></i> حساب کاربری</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Hero Slider -->
+        <div class="slider">
+            <div class="slide active" style="background-image: url('https://images.unsplash.com/photo-1498049794561-7780e7231661?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                <div class="slide-content">
+                    <h2>جدیدترین گوشی‌های هوشمند</h2>
+                    <p>جدیدترین مجموعه گوشی‌های هوشمند با ویژگی‌های فوق‌العاده را کشف کنید.</p>
+                    <a href="#" class="btn">همین حالا بخرید</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=1351&q=80');">
+                <div class="slide-content">
+                    <h2>لپ‌تاپ‌های قدرتمند</h2>
+                    <p>با لپ‌تاپ‌های پیشرفته ما برای کار و بازی، عملکرد نهایی را تجربه کنید.</p>
+                    <a href="#" class="btn">همین حالا بخرید</a>
+                </div>
+            </div>
+            <div class="slide" style="background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
+                <div class="slide-content">
+                    <h2>هدفون‌های premium</h2>
+                    <p>با مجموعه هدفون‌های premium ما در صدای شفاف و واضح غوطه‌ور شوید.</p>
+                    <a href="#" class="btn">همین حالا بخرید</a>
+                </div>
+            </div>
+            <div class="slider-nav">
+                <div class="slider-dot active"></div>
+                <div class="slider-dot"></div>
+                <div class="slider-dot"></div>
+            </div>
+        </div>
+
+        <!-- Featured Products -->
+        <h2 class="section-title">محصولات ویژه</h2>
+        <div class="products">
+            <div class="product animated">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">آیفون 13 پرو</h3>
+                    <p class="product-price">۹,۹۹۹,۰۰۰ تومان</p>
+                    <div class="product-actions">
+                        <a href="#" class="btn">جزئیات</a>
+                        <a href="#" class="btn">افزودن به سبد</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product animated">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1496181133206-80ce9b88a853?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">مک‌بوک پرو ۱۶ اینچ</h3>
+                    <p class="product-price">۲۳,۹۹۹,۰۰۰ تومان</p>
+                    <div class="product-actions">
+                        <a href="#" class="btn">جزئیات</a>
+                        <a href="#" class="btn">افزودن به سبد</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product animated">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">سامسونگ گلکسی S21</h3>
+                    <p class="product-price">۸,۴۹۹,۰۰۰ تومان</p>
+                    <div class="product-actions">
+                        <a href="#" class="btn">جزئیات</a>
+                        <a href="#" class="btn">افزودن به سبد</a>
+                    </div>
+                </div>
+            </div>
+            <div class="product animated">
+                <div class="product-img" style="background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');"></div>
+                <div class="product-content">
+                    <h3 class="product-title">هدفون سونی</h3>
+                    <p class="product-price">۲,۹۹۹,۰۰۰ تومان</p>
+                    <div class="product-actions">
+                        <a href="#" class="btn">جزئیات</a>
+                        <a href="#" class="btn">افزودن به سبد</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <h2 class="section-title">ایجاد حساب کاربری</h2>
+        <div class="registration">
+            <form id="registration-form">
+                <div class="form-group">
+                    <label for="name">نام کامل</label>
+                    <input type="text" id="name" class="form-control" placeholder="نام کامل خود را وارد کنید" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">آدرس ایمیل</label>
+                    <input type="email" id="email" class="form-control" placeholder="ایمیل خود را وارد کنید" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">شماره تلفن</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="شماره تلفن خود را وارد کنید" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">رمز عبور</label>
+                    <input type="password" id="password" class="form-control" placeholder="یک رمز عبور ایجاد کنید" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-password">تکرار رمز عبور</label>
+                    <input type="password" id="confirm-password" class="form-control" placeholder="رمز عبور خود را تکرار کنید" required>
+                </div>
+                <button type="submit" class="btn">ثبت نام</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>درباره ما</h3>
+                    <p>تک گجت فروشگاه یک‌مرحله‌ای شما برای تمام دستگاه‌های دیجیتال است. ما آخرین فناوری را با قیمت‌های رقابتی و خدمات مشتری عالی ارائه می‌دهیم.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>لینک‌های سریع</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> خانه</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> محصولات</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> پیشنهادات ویژه</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-left"></i> تماس با ما</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>اطلاعات تماس</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-map-marker-alt"></i> خیابان فناوری ۱۲۳، شهر دیجیتال</a></li>
+                        <li><a href="#"><i class="fas fa-phone"></i> +۹۸ (۲۱) ۱۲۳۴-۵۶۷۸</a></li>
+                        <li><a href="#"><i class="fas fa-envelope"></i> info@techgadget.ir</a></li>
+                    </ul>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© ۱۴۰۲ تک گجت. تمام حقوق محفوظ است.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Slider functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const dots = document.querySelectorAll('.slider-dot');
+            let currentSlide = 0;
+            
+            function showSlide(n) {
+                slides.forEach(slide => slide.classList.remove('active'));
+                dots.forEach(dot => dot.classList.remove('active'));
+                
+                currentSlide = (n + slides.length) % slides.length;
+                
+                slides[currentSlide].classList.add('active');
+                dots[currentSlide].classList.add('active');
+            }
+            
+            // Auto slide
+            setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000);
+            
+            // Dot navigation
+            dots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+            
+            // Form validation
+            const form = document.getElementById('registration-form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    alert('رمزهای عبور مطابقت ندارند!');
+                    return;
+                }
+                
+                // Simulate SMS verification
+                const phone = document.getElementById('phone').value;
+                alert(`کد تأیید پیامکی به شماره ${phone} ارسال شد. لطفاً گوشی خود را بررسی کنید.`);
+                
+                // In a real application, you would send the data to a PHP backend
+                // and handle the SMS verification process there
+            });
+        });
+    </script>
+</body>
+</html>
